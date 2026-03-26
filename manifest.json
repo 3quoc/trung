@@ -1,0 +1,60 @@
+[
+  {
+    "id": 1,
+    "word": "Lion",
+    "meaning": "Sư tử",
+    "level": "Beginner"
+  },
+  {
+    "id": 2,
+    "word": "Deer",
+    "meaning": "Con nai",
+    "level": "Beginner"
+  },
+  {
+    "id": 1774359612173,
+    "word": "one",
+    "meaning": "1",
+    "level": "Beginner"
+  },
+  {
+    "id": 1774359617873,
+    "word": "two",
+    "meaning": "2",
+    "level": "Beginner"
+  },
+  {
+    "id": 1774359646764,
+    "word": "three",
+    "meaning": "3",
+    "level": "Beginner"
+  },
+  {
+    "id": 1774359654405,
+    "word": "boy",
+    "meaning": "con trai",
+    "level": "Beginner"
+  },
+  {
+    "id": 1774359663916,
+    "word": "duck",
+    "meaning": "con vịt",
+    "level": "Beginner"
+  },
+  {
+    "id": 1774446423351,
+    "word": "cat",
+    "meaning": "meo",
+    "level": "Beginner",
+    "ipa": "",
+    "tips": ""
+  },
+  {
+    "id": 1774446480642,
+    "word": "car",
+    "meaning": "ô tô",
+    "level": "Beginner",
+    "ipa": "",
+    "tips": ""
+  }
+]

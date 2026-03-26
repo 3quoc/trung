@@ -1,0 +1,433 @@
+:root {
+    --primary: #4CAF50;
+    --primary-dark: #388E3C;
+    --danger: #FF5252;
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-white: #ffffff;
+    --text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #1a1a1a;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* Glass Panels */
+.glass-panel {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 2.5rem;
+    border-radius: 24px;
+    text-align: center;
+    color: var(--text-white);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    max-width: 400px;
+    width: 90%;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+    text-shadow: var(--text-shadow);
+}
+
+input, select {
+    width: 100%;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-radius: 12px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Game Screen */
+#game-screen {
+    flex-direction: column;
+}
+
+#game-top-bar {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999; /* Đưa lên trên cùng của mọi thứ */
+    display: none;
+    gap: 12px;
+}
+
+#game-screen.active #game-top-bar {
+    display: flex !important; /* Buộc hiển thị khi game active */
+}
+
+#pause-btn, #quit-btn {
+    width: 60px !important; /* Ép kích thước cố định để dễ nhìn */
+    height: 60px;
+    padding: 0 !important;
+    font-size: 2rem !important;
+    border-radius: 50% !important; /* Biến thành nút tròn */
+    margin: 0;
+    border: 3px solid rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+#pause-btn {
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+}
+
+#quit-btn {
+    background: rgba(200,0,0,0.5);
+    color: #fff;
+}
+
+#pause-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+#quit-btn:hover  { background: rgba(220,50,50,0.8);  transform: scale(1.1); }
+
+#parallax-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #4fc3f7, #b3e5fc); /* Bầu trời ban ngày tươi sáng */
+}
+
+#game-canvas {
+    position: absolute;
+    z-index: 4;
+    width: 100%;
+    height: calc(100% - 150px);
+}
+
+.bottom-panel {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 150px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border-top: 3px solid #ff9800;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 2rem;
+    z-index: 10;
+}
+
+.score-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    color: white;
+    font-weight: bold;
+}
+
+#re-hear-btn {
+    width: auto;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background: #ffb300;
+    color: #333;
+    border-radius: 8px;
+    margin: 0;
+}
+
+#mic-btn {
+    width: auto;
+    padding: 0.5rem 1.2rem;
+    font-size: 1.1rem;
+    background: #7c4dff;
+    color: white;
+    border-radius: 8px;
+    margin: 0 0 0 8px;
+    transition: all 0.2s;
+}
+
+#mic-btn:hover {
+    background: #651fff;
+    box-shadow: 0 0 12px rgba(124,77,255,0.6);
+}
+
+@keyframes mic-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(244,67,54,0.7); }
+    70%  { box-shadow: 0 0 0 12px rgba(244,67,54,0); }
+    100% { box-shadow: 0 0 0 0 rgba(244,67,54,0); }
+}
+
+#mic-btn.mic-active {
+    background: #f44336;
+    animation: mic-pulse 1s infinite;
+}
+
+#speech-container {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+}
+
+.input-area {
+    display: flex;
+    margin-bottom: 0;
+    flex: 1;
+    max-width: 400px;
+}
+
+#word-input {
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    border: 3px solid #4CAF50;
+    border-radius: 15px;
+    font-weight: bold;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+}
+
+.distance-container {
+    width: 300px;
+    text-align: center;
+}
+
+.distance-container .label {
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.progress-bar {
+    height: 25px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 12.5px;
+    position: relative;
+    margin-top: 15px;
+    border: 2px solid #555;
+    overflow: visible;
+}
+
+#distance-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f44336, #ff9800);
+    border-radius: 10px;
+    width: 50%;
+    transition: width 0.3s ease;
+}
+
+.icon {
+    position: absolute;
+    font-size: 35px;
+    top: -20px;
+}
+
+#ui-lion-icon { left: -15px; } /* Lion is chasing from left */
+#ui-deer-icon { right: -15px; } /* Deer is running right */
+
+.timer-bar {
+    width: 100%;
+    height: 5px;
+    background: rgba(255,255,255,0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#timer-fill {
+    height: 100%;
+    background: #FF5252;
+    width: 100%;
+}
+
+/* Admin Panel */
+#admin-panel {
+    background: #0f172a;
+    flex-direction: column;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.admin-nav {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+#close-admin { width: auto; }
+
+.admin-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.admin-form, .admin-list {
+    max-width: none;
+    text-align: left;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+/* Custom Scrollbar */
+.admin-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.admin-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.admin-list::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+}
+
+.admin-list::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.delete-btn {
+    background: var(--danger);
+    padding: 0.5rem;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden { display: none; }
+.danger { color: var(--danger); }
+
+#mcq-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.mcq-btn {
+    flex: 1 1 45%;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.mcq-btn:hover:not(:disabled) {
+    background: #4fc3f7;
+    color: white;
+    border-color: #0288d1;
+    transform: scale(1.02);
+}
+.mcq-btn:disabled {
+    opacity: 0.5;
+    background: #e0e0e0;
+    cursor: not-allowed;
+    transform: scale(0.95);
+}
+
