@@ -126,11 +126,12 @@ class TTSManager {
         };
     }
 
-    speak(text) {
+    speak(text, onEndCallback = null) {
         if (this.synth.speaking) this.synth.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         if (this.voice) utterance.voice = this.voice;
         utterance.rate = this.rate;
+        if (onEndCallback) utterance.onend = onEndCallback;
         this.synth.speak(utterance);
     }
 
