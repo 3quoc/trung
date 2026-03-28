@@ -85,6 +85,8 @@ class PreyRunGame {
             this.recognition.continuous = false;
             
             this.recognition.onresult = (event) => {
+                // Bỏ qua kết quả nếu game đang tạm dừng
+                if (this.paused) return;
                 let interim = '';
                 let final = '';
                 for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -180,12 +182,12 @@ class PreyRunGame {
         this.micBtn.addEventListener('click', () => {
             if (!this.running || this.paused || !this.wordObstacle.active) return;
             if (!this.recognition) {
-                alert('Trình duyệt không hỗ trợ nhận dạng giọng nói! Hãy dùng Chrome.');
+                if (this.speechStatus) this.speechStatus.innerText = '❌ Trình duyệt không hỗ trợ! Hãy dùng Chrome.';
                 return;
             }
             if (this.isListening) {
                 this.isListening = false;
-                this.recognition.stop();
+                try { this.recognition.stop(); } catch(e) {}
                 this.micBtn.classList.remove('mic-active');
                 this.speechStatus.innerText = 'Nhấn mic để nói tiếng Anh...';
             } else {
@@ -193,7 +195,14 @@ class PreyRunGame {
                 this.speechResult.innerText = '';
                 this.speechStatus.innerText = '🎙️ Đang nghe...';
                 this.micBtn.classList.add('mic-active');
-                try { this.recognition.start(); } catch(e) {}
+                try {
+                    this.recognition.start();
+                } catch(e) {
+                    console.warn('Mic error:', e);
+                    this.speechStatus.innerText = '❌ Lỗi mic: ' + e.message;
+                    this.isListening = false;
+                    this.micBtn.classList.remove('mic-active');
+                }
             }
         });
 
@@ -211,6 +220,17 @@ class PreyRunGame {
                 this.resume();
             } else {
                 this.paused = true;
+                
+                // Dừng speech recognition nếu đang nghe
+                if (this.isListening && this.recognition) {
+                    this.isListening = false;
+                    try { this.recognition.stop(); } catch(e) {}
+                    this.micBtn.classList.remove('mic-active');
+                }
+                
+                // Dừng TTS nếu đang nói
+                if (tts.synth.speaking) tts.synth.cancel();
+                
                 const overlay = document.getElementById('pause-overlay');
                 overlay.classList.remove('hidden');
                 
@@ -229,10 +249,9 @@ class PreyRunGame {
         });
 
         document.getElementById('quit-btn').addEventListener('click', () => {
-            if (confirm('Bạn có muốn thoát về Menu không?')) {
-                document.getElementById('pause-btn').textContent = '⏸';
-                this.quitToMenu();
-            }
+            // Dừng game ngay lập tức không cần hỏi (confirm() lỗi trên mobile)
+            document.getElementById('pause-btn').textContent = '⏸';
+            this.quitToMenu();
         });
 
         document.getElementById('practice-speak-btn').onclick = () => {
@@ -359,6 +378,18 @@ class PreyRunGame {
 
     quitToMenu() {
         this.running = false;
+        this.paused = false;
+        
+        // Dừng speech recognition nếu đang nghe
+        if (this.isListening && this.recognition) {
+            this.isListening = false;
+            try { this.recognition.stop(); } catch(e) {}
+            this.micBtn.classList.remove('mic-active');
+        }
+        
+        // Dừng TTS
+        if (tts.synth.speaking) tts.synth.cancel();
+        
         document.getElementById('pause-overlay').classList.add('hidden');
         document.getElementById('game-over-overlay').classList.add('hidden');
         showScreen('login-screen');
@@ -548,12 +579,19 @@ class PreyRunGame {
     }
 
     loop(timestamp) {
-        if (!this.running || this.paused) return;
+        if (!this.running) return;
+        if (this.paused) {
+            this.lastTime = 0; // Reset để tránh giật khi resume
+            return;
+        }
 
         const deltaTime = timestamp - (this.lastTime || timestamp);
         this.lastTime = timestamp;
 
-        this.update(deltaTime);
+        // Giới hạn deltaTime để tránh giật khi tab bị ẩn
+        const clampedDt = Math.min(deltaTime, 100);
+
+        this.update(clampedDt);
         this.draw();
 
         requestAnimationFrame((t) => this.loop(t));
