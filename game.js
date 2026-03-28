@@ -471,19 +471,10 @@ class PreyRunGame {
                 this.speechContainer.style.display = 'flex';
                 this.micBtn.classList.remove('hidden');
                 this.speechResult.innerText = '';
-                this.speechStatus.innerText = 'Nhấn 🎤 để phát âm tiếng Anh...';
-                // Auto-start listening after short delay
-                if (this.recognition && !this.isListening) {
-                    setTimeout(() => {
-                        if (this.wordObstacle.active && settingsDB.gameMode === 'speech') {
-                            this.isListening = true;
-                            this.speechResult.innerText = '';
-                            this.speechStatus.innerText = '🎙️ Đang nghe...';
-                            this.micBtn.classList.add('mic-active');
-                            try { this.recognition.start(); } catch(e) {}
-                        }
-                    }, 600);
-                }
+                this.speechStatus.innerText = 'Nhấn 🎤 Nói để phát âm tiếng Anh...';
+                // Không tự động bật mic vì trình duyệt yêu cầu user nhấn nút trực tiếp
+                this.isListening = false;
+                this.micBtn.classList.remove('mic-active');
             } else {
                 // --- TYPING MODE ---
                 this.inputEl.style.display = 'block';

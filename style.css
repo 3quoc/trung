@@ -347,10 +347,11 @@ button:active {
     flex-direction: column;
     align-items: center;
     gap: var(--space-xs);
-    font-size: clamp(1rem, 3vw, 1.4rem);
+    font-size: clamp(0.9rem, 2.5vw, 1.4rem);
     color: white;
     font-weight: bold;
     flex-shrink: 0;
+    min-width: 0;
 }
 
 #re-hear-btn {
@@ -602,8 +603,8 @@ button:active {
 }
 
 .admin-content {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-md);
     width: 100%;
     max-width: 1200px;
@@ -722,21 +723,23 @@ th {
     .bottom-panel {
         flex-direction: column;
         height: auto;
-        max-height: 45vh;
-        padding: var(--space-sm);
-        padding-bottom: calc(var(--space-sm) + var(--safe-bottom));
-        gap: var(--space-xs);
+        max-height: 40vh;
+        padding: var(--space-xs) var(--space-sm);
+        padding-bottom: calc(var(--space-xs) + var(--safe-bottom));
+        gap: 4px;
     }
 
     #game-canvas {
-        height: calc(100% - 0px); /* Full height, panel overlays on top */
+        height: 100%;
     }
 
     .score-container {
         flex-direction: row;
         width: 100%;
         justify-content: space-between;
+        align-items: center;
         gap: var(--space-xs);
+        font-size: 0.9rem;
     }
 
     .input-area {
@@ -746,6 +749,7 @@ th {
 
     #word-input {
         font-size: clamp(1.1rem, 5vw, 1.5rem);
+        padding: 8px;
     }
 
     .distance-container {
@@ -753,26 +757,44 @@ th {
     }
 
     .progress-bar {
-        margin-top: var(--space-xs);
+        margin-top: 4px;
+        height: 18px;
     }
 
-    /* Admin: single column, scrollable cards */
+    /* Admin: single column, full width */
     .admin-content {
-        grid-template-columns: 1fr;
+        flex-direction: column;
+    }
+
+    .admin-form {
+        width: 100%;
+    }
+
+    .admin-form input,
+    .admin-form select,
+    .admin-form button {
+        width: 100% !important;
+        font-size: 1rem !important;
     }
 
     .admin-list {
-        max-height: 40vh;
+        max-height: 45vh;
+        width: 100%;
     }
 
-    /* Table scroll on mobile */
-    .admin-list .glass-panel,
+    /* Table responsive trên mobile */
     .admin-list {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     table {
-        min-width: 400px;
+        min-width: 360px;
+    }
+
+    th, td {
+        padding: 8px 6px;
+        font-size: 0.8rem;
     }
 
     /* Level select buttons stack tighter */
@@ -833,7 +855,17 @@ th {
     }
 
     .admin-content {
-        grid-template-columns: 1fr 1fr;
+        flex-direction: row;
+    }
+
+    .admin-form {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .admin-list {
+        flex: 1;
+        min-width: 0;
     }
 
     .admin-list {
@@ -854,7 +886,17 @@ th {
     }
 
     .admin-content {
-        grid-template-columns: 1fr 2.5fr;
+        flex-direction: row;
+    }
+
+    .admin-form {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .admin-list {
+        flex: 2.5;
+        min-width: 0;
     }
 
     .admin-list {
@@ -937,10 +979,14 @@ th {
    LIVES DISPLAY
    ============================================ */
 #lives-display {
-    font-size: clamp(1rem, 3vw, 1.5rem) !important;
+    font-size: clamp(0.85rem, 2.5vw, 1.3rem) !important;
     color: #ff5252;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* ============================================
