@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Prey Run - Vocabulary Escape</title>
 
     <!-- PWA Meta Tags -->
@@ -11,10 +11,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Prey Run">
-    <link rel="apple-touch-icon" href="/icon-512.png">
+    <link rel="apple-touch-icon" href="icon-512.png">
 
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
 
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
@@ -29,14 +29,14 @@
                 <input type="password" id="admin-pass" placeholder="Mật mã...">
                 <button id="login-btn">Đăng nhập</button>
                 <button id="start-game-btn">Chơi ngay</button>
-                <hr style="margin: 1.5rem 0; border: 1px solid var(--glass-border)">
-                <button id="settings-btn" style="background: #2196F3; margin-top: 5px;">Cài đặt Game</button>
+                <hr style="margin: 1rem 0; border: 1px solid var(--glass-border)">
+                <button id="settings-btn">⚙️ Cài đặt Game</button>
             </div>
         </div>
 
         <!-- Settings Screen -->
         <div id="settings-screen" class="screen">
-            <div class="glass-panel" style="max-width: 500px; max-height: 80vh; overflow-y: auto;">
+            <div class="glass-panel">
                 <h2>Cài đặt (Settings)</h2>
                 
                 <div style="text-align: left; margin-bottom: 20px;">
@@ -89,8 +89,8 @@
                     </div>
                 </div>
 
-                <button id="save-settings-btn" style="background: #4CAF50;">Lưu Cài đặt</button>
-                <button id="settings-back-btn" class="danger">Quay lại</button>
+                <button id="save-settings-btn">💾 Lưu Cài đặt</button>
+                <button id="settings-back-btn">← Quay lại</button>
             </div>
         </div>
 
@@ -108,9 +108,9 @@
 
             <div class="game-ui bottom-panel">
                 <div class="score-container">
-                    <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
                         <span class="label">Điểm: <span id="current-score">0</span></span>
-                        <div id="lives-display" style="font-size: 1.5rem; color: #ff5252; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">♥️♥️♥️</div>
+                        <div id="lives-display">♥️♥️♥️</div>
                     </div>
                     <button id="re-hear-btn">🔊 Nghe lại</button>
                     <button id="mic-btn" class="hidden" title="Nhấn để nói">🎤 Nói</button>
@@ -253,7 +253,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
+                navigator.serviceWorker.register('sw.js')
                     .then(reg => console.log('✅ Service Worker đã đăng ký:', reg.scope))
                     .catch(err => console.warn('❌ SW thất bại:', err));
             });

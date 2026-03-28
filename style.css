@@ -1,227 +1,394 @@
+/* ============================================
+   PREY RUN — Premium Responsive Design System
+   ============================================ */
+
+/* --- Design Tokens --- */
 :root {
+    /* Colors */
     --primary: #4CAF50;
-    --primary-dark: #388E3C;
+    --primary-glow: rgba(76, 175, 80, 0.4);
+    --primary-dark: #2E7D32;
+    --accent: #FFD54F;
+    --accent-glow: rgba(255, 213, 79, 0.3);
     --danger: #FF5252;
-    --glass: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --text-white: #ffffff;
-    --text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    --danger-glow: rgba(255, 82, 82, 0.4);
+    --info: #4FC3F7;
+
+    /* Surfaces */
+    --bg-deep: #0a0f1a;
+    --glass: rgba(15, 25, 50, 0.65);
+    --glass-light: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-border-hover: rgba(255, 255, 255, 0.25);
+
+    /* Text */
+    --text-white: #f0f2f5;
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+
+    /* Spacing (fluid) */
+    --space-xs: clamp(4px, 1vw, 8px);
+    --space-sm: clamp(8px, 2vw, 12px);
+    --space-md: clamp(12px, 3vw, 20px);
+    --space-lg: clamp(20px, 4vw, 32px);
+    --space-xl: clamp(28px, 5vw, 48px);
+
+    /* Radius */
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --radius-full: 50%;
+
+    /* Blur */
+    --blur: blur(20px);
+    --blur-heavy: blur(40px);
+
+    /* Safe area for notched phones */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
 }
 
-* {
+/* --- Reset & Base --- */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Outfit', sans-serif;
+}
+
+html {
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
 }
 
 body, html {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #1a1a1a;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-white);
 }
 
+/* --- App Container --- */
 #app {
     width: 100%;
     height: 100%;
     position: relative;
 }
 
+/* --- Screen System --- */
 .screen {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     display: none;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 .screen.active {
     display: flex;
 }
 
-/* Glass Panels */
+/* Animated background for non-game screens */
+#login-screen,
+#settings-screen {
+    background: 
+        radial-gradient(ellipse at 20% 50%, rgba(76, 175, 80, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(79, 195, 247, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(255, 213, 79, 0.08) 0%, transparent 50%),
+        var(--bg-deep);
+}
+
+/* ============================================
+   GLASS PANELS — Frosted Glass UI
+   ============================================ */
 .glass-panel {
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
+    background: var(--glass);
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
     border: 1px solid var(--glass-border);
-    padding: 2.5rem;
-    border-radius: 24px;
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
     text-align: center;
     color: var(--text-white);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-    max-width: 400px;
-    width: 90%;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    max-width: 420px;
+    width: 92%;
+    animation: panelFadeIn 0.4s ease-out;
 }
 
+@keyframes panelFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ============================================
+   TYPOGRAPHY — Fluid Scaling
+   ============================================ */
 h1 {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 700;
     letter-spacing: 2px;
     text-shadow: var(--text-shadow);
+    margin-bottom: var(--space-md);
+    background: linear-gradient(135deg, #4CAF50, #81C784, #FFD54F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleFloat 3s ease-in-out infinite;
 }
 
+@keyframes titleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+h2 {
+    font-size: clamp(1.3rem, 4vw, 2rem);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+    letter-spacing: 1px;
+}
+
+h3 {
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+    color: var(--accent);
+}
+
+p {
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    color: var(--text-muted);
+    margin-bottom: var(--space-sm);
+}
+
+.label {
+    font-size: clamp(0.75rem, 2vw, 1rem);
+}
+
+/* ============================================
+   FORM CONTROLS — Touch Friendly
+   ============================================ */
 input, select {
     width: 100%;
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 12px;
+    padding: clamp(10px, 2.5vw, 14px);
+    margin: var(--space-xs) 0;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--glass-border);
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 1rem;
+    background: var(--glass-light);
+    color: var(--text-white);
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    font-family: inherit;
     outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    min-height: 44px; /* Touch target */
 }
 
+input:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+input::placeholder {
+    color: var(--text-muted);
+}
+
+/* ============================================
+   BUTTONS — Premium Interactive
+   ============================================ */
 button {
     width: 100%;
-    padding: 1rem;
-    margin: 0.5rem 0;
-    border-radius: 12px;
+    padding: clamp(10px, 2.5vw, 14px);
+    margin: var(--space-xs) 0;
+    border-radius: var(--radius-sm);
     border: none;
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
-    font-weight: bold;
-    font-size: 1.1rem;
+    font-weight: 700;
+    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+    font-family: inherit;
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    min-height: 44px; /* Touch target */
+    position: relative;
+    overflow: hidden;
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+button:hover::after {
+    opacity: 1;
 }
 
 button:hover {
-    background: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    box-shadow: 0 6px 20px var(--primary-glow);
 }
 
 button:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 8px var(--primary-glow);
 }
 
-/* Game Screen */
+/* ============================================
+   GAME SCREEN — Responsive Layout
+   ============================================ */
 #game-screen {
     flex-direction: column;
 }
 
+/* --- Top Bar (Pause/Quit) --- */
 #game-top-bar {
     position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 9999; /* Đưa lên trên cùng của mọi thứ */
+    top: calc(var(--space-sm) + var(--safe-top));
+    left: calc(var(--space-sm) + var(--safe-left));
+    z-index: 9999;
     display: none;
-    gap: 12px;
+    gap: var(--space-xs);
 }
 
 #game-screen.active #game-top-bar {
-    display: flex !important; /* Buộc hiển thị khi game active */
+    display: flex !important;
 }
 
 #pause-btn, #quit-btn {
-    width: 60px !important; /* Ép kích thước cố định để dễ nhìn */
-    height: 60px;
+    width: clamp(42px, 10vw, 56px) !important;
+    height: clamp(42px, 10vw, 56px);
     padding: 0 !important;
-    font-size: 2rem !important;
-    border-radius: 50% !important; /* Biến thành nút tròn */
+    font-size: clamp(1.3rem, 4vw, 1.8rem) !important;
+    border-radius: var(--radius-full) !important;
     margin: 0;
-    border: 3px solid rgba(255,255,255,0.4);
+    border: 2px solid rgba(255, 255, 255, 0.25) !important;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    min-height: 42px;
 }
 
 #pause-btn {
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.45);
     color: #fff;
+    backdrop-filter: blur(8px);
 }
 
 #quit-btn {
-    background: rgba(200,0,0,0.5);
+    background: rgba(180, 40, 40, 0.5);
     color: #fff;
+    backdrop-filter: blur(8px);
 }
 
-#pause-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
-#quit-btn:hover  { background: rgba(220,50,50,0.8);  transform: scale(1.1); }
+#pause-btn:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.08); }
+#quit-btn:hover  { background: rgba(220, 50, 50, 0.7);  transform: scale(1.08); }
 
+/* --- Parallax & Canvas --- */
 #parallax-container {
     position: absolute;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: linear-gradient(to bottom, #4fc3f7, #b3e5fc); /* Bầu trời ban ngày tươi sáng */
+    background: linear-gradient(to bottom, #4fc3f7, #b3e5fc);
 }
 
 #game-canvas {
     position: absolute;
     z-index: 4;
     width: 100%;
-    height: calc(100% - 150px);
+    height: 100%;
 }
 
+/* ============================================
+   BOTTOM PANEL — Responsive Game HUD
+   ============================================ */
 .bottom-panel {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 150px;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    border-top: 3px solid #ff9800;
+    background: linear-gradient(to top, rgba(5, 10, 25, 0.95), rgba(5, 10, 25, 0.8));
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
+    border-top: 2px solid rgba(255, 152, 0, 0.5);
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
-    padding: 0 2rem;
+    padding: var(--space-sm) var(--space-md);
+    padding-bottom: calc(var(--space-sm) + var(--safe-bottom));
     z-index: 10;
+    gap: var(--space-sm);
 }
 
+/* --- Score Area --- */
 .score-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    font-size: 1.5rem;
+    gap: var(--space-xs);
+    font-size: clamp(1rem, 3vw, 1.4rem);
     color: white;
     font-weight: bold;
+    flex-shrink: 0;
 }
 
 #re-hear-btn {
     width: auto;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    background: #ffb300;
-    color: #333;
-    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
+    background: linear-gradient(135deg, #ffb300, #ff8f00);
+    color: #1a1a1a;
+    border-radius: var(--radius-sm);
     margin: 0;
+    min-height: 36px;
 }
 
 #mic-btn {
     width: auto;
-    padding: 0.5rem 1.2rem;
-    font-size: 1.1rem;
-    background: #7c4dff;
+    padding: 6px 14px;
+    font-size: clamp(0.85rem, 2.2vw, 1rem);
+    background: linear-gradient(135deg, #7c4dff, #651fff);
     color: white;
-    border-radius: 8px;
-    margin: 0 0 0 8px;
+    border-radius: var(--radius-sm);
+    margin: 0 0 0 6px;
     transition: all 0.2s;
+    min-height: 36px;
 }
 
 #mic-btn:hover {
-    background: #651fff;
-    box-shadow: 0 0 12px rgba(124,77,255,0.6);
+    background: linear-gradient(135deg, #651fff, #536dfe);
+    box-shadow: 0 0 16px rgba(124, 77, 255, 0.5);
 }
 
 @keyframes mic-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(244,67,54,0.7); }
-    70%  { box-shadow: 0 0 0 12px rgba(244,67,54,0); }
-    100% { box-shadow: 0 0 0 0 rgba(244,67,54,0); }
+    0%   { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.6); }
+    70%  { box-shadow: 0 0 0 14px rgba(244, 67, 54, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
 }
 
 #mic-btn.mic-active {
-    background: #f44336;
+    background: linear-gradient(135deg, #f44336, #d32f2f);
     animation: mic-pulse 1s infinite;
 }
 
@@ -229,124 +396,242 @@ button:active {
     width: 100%;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     text-align: center;
 }
 
+/* --- Input Area --- */
 .input-area {
     display: flex;
-    margin-bottom: 0;
     flex: 1;
-    max-width: 400px;
+    max-width: 360px;
+    min-width: 0;
 }
 
 #word-input {
     width: 100%;
     text-align: center;
-    font-size: 2rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.9);
-    color: #333;
-    border: 3px solid #4CAF50;
-    border-radius: 15px;
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    padding: clamp(8px, 2vw, 12px);
+    background: rgba(255, 255, 255, 0.92);
+    color: #1a1a2e;
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-md);
     font-weight: bold;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px var(--primary-glow), inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    min-height: 44px;
 }
 
+#word-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 24px var(--accent-glow), inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* --- Distance Bar --- */
 .distance-container {
-    width: 300px;
+    width: clamp(140px, 25vw, 300px);
     text-align: center;
+    flex-shrink: 0;
 }
 
 .distance-container .label {
-    color: white;
-    font-weight: bold;
-    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: clamp(0.65rem, 1.8vw, 0.95rem);
 }
 
 .progress-bar {
-    height: 25px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 12.5px;
+    height: clamp(18px, 3vw, 25px);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
     position: relative;
-    margin-top: 15px;
-    border: 2px solid #555;
+    margin-top: var(--space-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     overflow: visible;
 }
 
 #distance-fill {
     height: 100%;
-    background: linear-gradient(90deg, #f44336, #ff9800);
-    border-radius: 10px;
+    background: linear-gradient(90deg, #f44336, #ff9800, #ffeb3b);
+    border-radius: 999px;
     width: 50%;
     transition: width 0.3s ease;
+    box-shadow: 0 0 12px rgba(255, 152, 0, 0.4);
 }
 
 .icon {
     position: absolute;
-    font-size: 35px;
-    top: -20px;
+    font-size: clamp(22px, 5vw, 35px);
+    top: clamp(-14px, -3vw, -20px);
 }
 
-#ui-lion-icon { left: -15px; } /* Lion is chasing from left */
-#ui-deer-icon { right: -15px; } /* Deer is running right */
+#ui-lion-icon { left: -12px; }
+#ui-deer-icon { right: -12px; }
 
+/* --- Timer Bar --- */
 .timer-bar {
     width: 100%;
-    height: 5px;
-    background: rgba(255,255,255,0.1);
+    height: 4px;
+    background: rgba(255, 255, 255, 0.06);
     position: absolute;
     top: 0;
     left: 0;
+    border-radius: 0 0 2px 2px;
 }
 
 #timer-fill {
     height: 100%;
-    background: #FF5252;
+    background: linear-gradient(90deg, var(--danger), #ff8a80);
+    width: 100%;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 8px var(--danger-glow);
+}
+
+/* ============================================
+   MCQ BUTTONS — Card Style
+   ============================================ */
+#mcq-container {
+    display: flex;
+    gap: clamp(6px, 1.5vw, 10px);
+    justify-content: center;
+    flex-wrap: wrap;
     width: 100%;
 }
 
-/* Admin Panel */
-#admin-panel {
-    background: #0f172a;
-    flex-direction: column;
-    padding: 2rem;
+.mcq-btn {
+    flex: 1 1 45%;
+    background: rgba(255, 255, 255, 0.92);
+    color: #1a1a2e;
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    font-weight: bold;
+    border: 2px solid rgba(200, 200, 200, 0.4);
+    border-radius: var(--radius-sm);
+    padding: clamp(8px, 2vw, 12px);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 44px;
+}
+
+.mcq-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+    color: white;
+    border-color: #0288d1;
+    transform: scale(1.03);
+    box-shadow: 0 4px 16px rgba(79, 195, 247, 0.3);
+}
+
+.mcq-btn:disabled {
+    opacity: 0.45;
+    background: #e0e0e0;
+    cursor: not-allowed;
+    transform: scale(0.96);
+}
+
+/* ============================================
+   OVERLAYS — Game Pause / Over / Level Select
+   ============================================ */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.82);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-md);
+    animation: overlayFadeIn 0.3s ease-out;
+}
+
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.overlay .glass-panel {
+    max-height: 85vh;
     overflow-y: auto;
+}
+
+.hidden { display: none !important; }
+.danger { color: var(--danger) !important; }
+
+/* Level Select Buttons */
+.level-btn {
+    border-radius: var(--radius-md) !important;
+    margin: var(--space-xs) 0;
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem) !important;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================
+   ADMIN PANEL — Responsive Grid
+   ============================================ */
+#admin-panel {
+    background: 
+        radial-gradient(ellipse at 20% 80%, rgba(76, 175, 80, 0.08) 0%, transparent 50%),
+        var(--bg-deep);
+    flex-direction: column;
+    padding: var(--space-md);
+    padding-top: calc(var(--space-md) + var(--safe-top));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .admin-nav {
     display: flex;
     width: 100%;
+    max-width: 1200px;
+    margin: 0 auto var(--space-md);
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    gap: var(--space-sm);
 }
 
-#close-admin { width: auto; }
+.admin-nav h1 {
+    font-size: clamp(1.3rem, 4vw, 2rem);
+    margin-bottom: 0;
+}
+
+#close-admin {
+    width: auto;
+    padding: 8px 16px;
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
+    min-height: 40px;
+    flex-shrink: 0;
+}
 
 .admin-content {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2rem;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
     width: 100%;
     max-width: 1200px;
+    margin: 0 auto;
 }
 
 .admin-form, .admin-list {
     max-width: none;
     text-align: left;
-    max-height: 60vh;
     overflow-y: auto;
-    padding-right: 1rem;
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-form {
+    max-height: none;
+}
+
+.admin-list {
+    max-height: 50vh;
 }
 
 /* Custom Scrollbar */
 .admin-list::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .admin-list::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
     border-radius: 10px;
 }
 
@@ -359,75 +644,316 @@ button:active {
     background: var(--primary-dark);
 }
 
+/* --- Admin Table --- */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 1rem;
+    margin-top: var(--space-sm);
 }
 
 th, td {
-    padding: 1rem;
+    padding: clamp(6px, 1.5vw, 12px);
     text-align: left;
     border-bottom: 1px solid var(--glass-border);
+    font-size: clamp(0.75rem, 2vw, 0.95rem);
+    white-space: nowrap;
+}
+
+th {
+    color: var(--accent);
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    background: rgba(10, 15, 26, 0.95);
+    z-index: 2;
 }
 
 .delete-btn {
-    background: var(--danger);
-    padding: 0.5rem;
+    background: linear-gradient(135deg, var(--danger), #d32f2f) !important;
+    padding: 6px 12px !important;
+    width: auto !important;
+    font-size: clamp(0.7rem, 1.8vw, 0.85rem) !important;
+    min-height: 36px;
+    border-radius: 8px !important;
 }
 
-/* Animations */
+.list-controls {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-sm);
+}
+
+.list-controls button {
+    width: auto;
+    padding: 8px 14px;
+    font-size: clamp(0.75rem, 2vw, 0.85rem);
+    min-height: 38px;
+}
+
+#export-btn {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+#import-btn {
+    background: linear-gradient(135deg, #FF9800, #F57C00);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
 
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    z-index: 100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+@keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
 }
 
-.hidden { display: none; }
-.danger { color: var(--danger); }
+/* ============================================
+   RESPONSIVE — Mobile First Breakpoints
+   ============================================ */
 
-#mcq-container {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
-}
-.mcq-btn {
-    flex: 1 1 45%;
-    background: rgba(255, 255, 255, 0.9);
-    color: #333;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.mcq-btn:hover:not(:disabled) {
-    background: #4fc3f7;
-    color: white;
-    border-color: #0288d1;
-    transform: scale(1.02);
-}
-.mcq-btn:disabled {
-    opacity: 0.5;
-    background: #e0e0e0;
-    cursor: not-allowed;
-    transform: scale(0.95);
+/* ---- MOBILE PORTRAIT (< 600px) ---- */
+@media (max-width: 599px) {
+    .bottom-panel {
+        flex-direction: column;
+        height: auto;
+        max-height: 45vh;
+        padding: var(--space-sm);
+        padding-bottom: calc(var(--space-sm) + var(--safe-bottom));
+        gap: var(--space-xs);
+    }
+
+    #game-canvas {
+        height: calc(100% - 0px); /* Full height, panel overlays on top */
+    }
+
+    .score-container {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        gap: var(--space-xs);
+    }
+
+    .input-area {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #word-input {
+        font-size: clamp(1.1rem, 5vw, 1.5rem);
+    }
+
+    .distance-container {
+        width: 100%;
+    }
+
+    .progress-bar {
+        margin-top: var(--space-xs);
+    }
+
+    /* Admin: single column, scrollable cards */
+    .admin-content {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-list {
+        max-height: 40vh;
+    }
+
+    /* Table scroll on mobile */
+    .admin-list .glass-panel,
+    .admin-list {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 400px;
+    }
+
+    /* Level select buttons stack tighter */
+    .level-btn {
+        padding: clamp(10px, 3vw, 14px) !important;
+    }
+
+    /* MCQ 2x2 grid */
+    .mcq-btn {
+        flex: 1 1 46%;
+    }
 }
 
+/* ---- MOBILE LANDSCAPE (short height) ---- */
+@media (max-height: 500px) {
+    .bottom-panel {
+        flex-direction: row;
+        height: auto;
+        max-height: 40vh;
+        padding: 4px var(--space-sm);
+        gap: 4px;
+    }
+
+    .score-container {
+        flex-direction: column;
+        gap: 2px;
+        font-size: 0.85rem;
+    }
+
+    #word-input {
+        font-size: 1rem;
+        padding: 6px;
+    }
+
+    .distance-container {
+        width: 120px;
+    }
+
+    .glass-panel {
+        padding: var(--space-sm);
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .overlay .glass-panel {
+        max-height: 95vh;
+    }
+}
+
+/* ---- TABLET (600px - 1023px) ---- */
+@media (min-width: 600px) and (max-width: 1023px) {
+    .bottom-panel {
+        padding: var(--space-sm) var(--space-lg);
+    }
+
+    #game-canvas {
+        height: calc(100% - 100px);
+    }
+
+    .admin-content {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .admin-list {
+        max-height: 60vh;
+    }
+}
+
+/* ---- DESKTOP (1024px+) ---- */
+@media (min-width: 1024px) {
+    .bottom-panel {
+        padding: var(--space-md) var(--space-xl);
+        height: auto;
+        max-height: 160px;
+    }
+
+    #game-canvas {
+        height: calc(100% - 130px);
+    }
+
+    .admin-content {
+        grid-template-columns: 1fr 2.5fr;
+    }
+
+    .admin-list {
+        max-height: 65vh;
+    }
+
+    .glass-panel {
+        max-width: 440px;
+    }
+
+    /* Wider level select on desktop */
+    #level-select-overlay .glass-panel {
+        max-width: 400px;
+    }
+}
+
+/* ============================================
+   SETTINGS SCREEN — Responsive
+   ============================================ */
+#settings-screen .glass-panel {
+    max-width: 520px;
+    max-height: calc(85vh - var(--safe-top) - var(--safe-bottom));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#settings-screen .glass-panel::-webkit-scrollbar {
+    width: 4px;
+}
+
+#settings-screen .glass-panel::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+/* Settings form groups */
+#settings-screen label {
+    font-size: clamp(0.85rem, 2.2vw, 1rem);
+}
+
+#settings-screen select,
+#settings-screen input[type="number"] {
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+}
+
+#save-settings-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+}
+
+#settings-back-btn {
+    background: linear-gradient(135deg, #616161, #424242) !important;
+}
+
+/* ============================================
+   LOGIN SCREEN — Extra Polish
+   ============================================ */
+#login-screen .glass-panel p {
+    color: var(--text-muted);
+    font-size: clamp(0.8rem, 2.3vw, 0.95rem);
+}
+
+#start-game-btn {
+    background: linear-gradient(135deg, #ff9800, #f57c00) !important;
+    font-size: clamp(1rem, 3vw, 1.2rem) !important;
+}
+
+#start-game-btn:hover {
+    box-shadow: 0 6px 24px rgba(255, 152, 0, 0.4) !important;
+}
+
+#login-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+}
+
+#settings-btn {
+    background: linear-gradient(135deg, #2196F3, #1565C0) !important;
+}
+
+/* ============================================
+   LIVES DISPLAY
+   ============================================ */
+#lives-display {
+    font-size: clamp(1rem, 3vw, 1.5rem) !important;
+    color: #ff5252;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    letter-spacing: 2px;
+}
+
+/* ============================================
+   PRACTICE AREA (Pause Screen)
+   ============================================ */
+#practice-area {
+    text-align: center;
+    border: 1px solid rgba(255, 213, 79, 0.3) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: var(--radius-md) !important;
+}
+
+#practice-area button {
+    width: auto !important;
+    min-height: 40px;
+}

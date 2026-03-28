@@ -1,19 +1,19 @@
 const CACHE_NAME = 'prey-run-v6';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/game.js',
-  '/ui.js',
-  '/vocabulary.js',
-  '/manifest.json',
-  '/icon-512.png',
-  '/anime_bg.png',
-  '/anime_deer.png',
-  '/anime_lion.png',
-  '/rock_obstacle.png',
-  '/log_obstacle.png',
-  '/puddle_obstacle.png',
+  './',
+  'index.html',
+  'style.css',
+  'game.js',
+  'ui.js',
+  'vocabulary.js',
+  'manifest.json',
+  'icon-512.png',
+  'anime_bg.png',
+  'anime_deer.png',
+  'anime_lion.png',
+  'rock_obstacle.png',
+  'log_obstacle.png',
+  'puddle_obstacle.png',
   'https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap'
 ];
 
