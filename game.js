@@ -1,5 +1,54 @@
 // Main Game Engine
 
+// Fuzzy Matching & Homophones Helper Function
+function isSpeechMatch(said, targetRaw) {
+    const saidClean = said.trim().toLowerCase();
+    const target = targetRaw.trim().toLowerCase();
+
+    // 1. Basic match
+    if (saidClean === target || saidClean.includes(target) || target.includes(saidClean)) return true;
+
+    // 2. Common Mishears / Homophones
+    const commonMishears = {
+        'lion': ['line', 'lying', 'iron', 'ryan', 'lionel'],
+        'deer': ['dear', 'there', 'the', 'dea', 'deal'],
+        'forest': ['rest', 'for it', 'florist'],
+        'escape': ['skate', 'scared', 'scarf', 'is cape', 'x cape'],
+        'predator': ['editor', 'reddit', 'credit'],
+        'monkey': ['money', 'mickey'],
+        'bear': ['beer', 'bare', 'pair']
+    };
+
+    // 3. Levenshtein Distance
+    const levDist = (a, b) => {
+        const matrix = [];
+        for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+        for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+        for (let i = 1; i <= b.length; i++) {
+            for (let j = 1; j <= a.length; j++) {
+                if (b.charAt(i - 1) === a.charAt(j - 1)) matrix[i][j] = matrix[i - 1][j - 1];
+                else matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
+            }
+        }
+        return matrix[b.length][a.length];
+    };
+
+    // 4. Word-by-word analysis
+    const saidWords = saidClean.split(/\s+/);
+    for (const word of saidWords) {
+        if (commonMishears[target] && commonMishears[target].includes(word)) return true;
+        
+        const dist = levDist(target, word);
+        const maxLength = Math.max(target.length, word.length);
+        const similarity = (maxLength - dist) / maxLength;
+        
+        if (similarity >= 0.70) return true; // 70% similarity threshold
+        if (target.length <= 4 && dist <= 1) return true; // Short words tolerate 1 letter off
+    }
+
+    return false;
+}
+
 class PreyRunGame {
     constructor() {
         this.canvas = document.getElementById('game-canvas');
@@ -98,9 +147,9 @@ class PreyRunGame {
                 if (this.speechResult) this.speechResult.innerText = displayText;
                 
                 if (final && this.currentWord) {
-                    // So sánh với từ đúng
-                    const correct = this.currentWord.word.toLowerCase();
-                    if (final === correct || final.includes(correct) || correct.includes(final)) {
+                    // So sánh bằng thuật toán thông minh
+                    const correct = this.currentWord.word;
+                    if (isSpeechMatch(final, correct)) {
                         this.speechStatus.innerText = '✅ Đúng rồi!';
                         this.micBtn.classList.remove('mic-active');
                         this.isListening = false;
@@ -330,7 +379,7 @@ class PreyRunGame {
             const said = event.results[0][0].transcript.trim().toLowerCase();
             const confidence = Math.round(event.results[0][0].confidence * 100);
 
-            if (said === target || said.includes(target) || target.includes(said)) {
+            if (isSpeechMatch(said, target)) {
                 resultEl.style.cssText = 'color:#69f0ae; background:rgba(0,200,83,0.15); font-weight:bold;';
                 resultEl.innerHTML = `✅ Đúng rồi! Bạn đã nói: "<b>${said}</b>" (${confidence}% chắc chắn)`;
             } else {
