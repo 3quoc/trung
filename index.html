@@ -243,16 +243,29 @@
 
     </div>
 
-    <script src="vocabulary.js"></script>
-    <script src="ui.js"></script>
-    <script src="game.js"></script>
+    <script src="vocabulary.js?v=7"></script>
+    <script src="ui.js?v=7"></script>
+    <script src="game.js?v=7"></script>
 
     <!-- PWA Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('✅ Service Worker đã đăng ký:', reg.scope))
+                    .then(reg => {
+                        console.log('✅ Service Worker đã đăng ký:', reg.scope);
+                        reg.addEventListener('updatefound', () => {
+                            const newWorker = reg.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // Báo hiệu có bản mới
+                                    if (confirm('App vừa có bản cập nhật mới! Bấm OK để tải lại giao diện nhé.')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
                     .catch(err => console.warn('❌ SW thất bại:', err));
             });
         }

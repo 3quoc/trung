@@ -1,4 +1,4 @@
-const CACHE_NAME = 'prey-run-v6';
+const CACHE_NAME = 'prey-run-v9';
 const ASSETS = [
   './',
   'index.html',

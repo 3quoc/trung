@@ -303,12 +303,30 @@ class PreyRunGame {
         checkRec.interimResults = false;
         checkRec.continuous = false;
 
-        checkBtn.innerText = '🎙️ Đang nghe...';
+        let timeoutId = null;
+
+        const resetState = (msg, color = '#ffb300') => {
+            if (timeoutId) clearTimeout(timeoutId);
+            if (!checkBtn.disabled) return;
+            try { checkRec.abort(); } catch(e) {}
+            resultEl.style.cssText = `color:${color};`;
+            resultEl.innerText = msg;
+            checkBtn.innerText = '🧪 Nói & Kiểm tra lại';
+            checkBtn.disabled = false;
+        };
+
+        checkBtn.innerText = '🎙️ Đang nghe... (4s)';
         checkBtn.disabled = true;
         resultEl.style.cssText = 'color:#fff; background:rgba(255,255,255,0.05);';
         resultEl.innerText = 'Hãy nói từ đó...';
 
+        // Custom 4s timeout
+        timeoutId = setTimeout(() => {
+            resetState('⚠️ Hết thời gian chờ (4s). Vui lòng thử lại!', '#ff7043');
+        }, 4000);
+
         checkRec.onresult = (event) => {
+            if (timeoutId) clearTimeout(timeoutId);
             const said = event.results[0][0].transcript.trim().toLowerCase();
             const confidence = Math.round(event.results[0][0].confidence * 100);
 
@@ -325,13 +343,19 @@ class PreyRunGame {
         };
 
         checkRec.onerror = (e) => {
-            resultEl.style.cssText = 'color:#ffb300;';
-            resultEl.innerText = e.error === 'no-speech' ? '⚠️ Không nghe thấy giọng, thử lại!' : '❌ Lỗi: ' + e.error;
-            checkBtn.innerText = '🧪 Nói & Kiểm tra lại';
-            checkBtn.disabled = false;
+            const msg = e.error === 'no-speech' ? '⚠️ Không nghe thấy giọng, thử lại!' : '❌ Lỗi: ' + e.error;
+            resetState(msg, '#ffb300');
         };
 
-        checkRec.start();
+        checkRec.onend = () => {
+            resetState('⚠️ Đã ngừng nghe. Vui lòng thử lại!', '#ffb300');
+        };
+
+        try {
+            checkRec.start();
+        } catch(e) {
+            resetState('❌ Không thể bắt đầu Mic. Lỗi hệ thống.', '#ff5252');
+        }
     }
 
     async startPracticeRecording() {
