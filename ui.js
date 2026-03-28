@@ -152,15 +152,11 @@ addWordBtn.addEventListener('click', () => {
     const word = newWordInput.value;
     const meaning = newMeaningInput.value;
     const level = newLevelSelect.value;
-    const ipa = document.getElementById('new-ipa').value;
-    const tips = document.getElementById('new-tips').value;
     
     if (word && meaning) {
-        vocabDB.addWord(word, meaning, level, ipa, tips);
+        vocabDB.addWord(word, meaning, level);
         newWordInput.value = '';
         newMeaningInput.value = '';
-        document.getElementById('new-ipa').value = '';
-        document.getElementById('new-tips').value = '';
         renderWordList();
     } else {
         alert('Vui lòng nhập đầy đủ thông tin!');
